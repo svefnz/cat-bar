@@ -429,3 +429,10 @@
 "fmt.expiry_short.today" = "今天过期";
 "fmt.expiry_short.days" = "剩 %d 天";
 "fmt.expiry_short.long_term" = "长期有效";
+
+"ui.settings.auto_update" = "自动更新";
+"ui.settings.auto_update_interval" = "间隔（小时）";
+"ui.settings.next_update" = "下次更新：%@";
+"fmt.remote_config.next_update_hours_minutes" = "自动 %d时%分";
+"fmt.remote_config.next_update_minutes" = "自动 %d分";
+"fmt.remote_config.last_update" = "上次 %@";

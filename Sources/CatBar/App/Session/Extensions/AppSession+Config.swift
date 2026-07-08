@@ -276,6 +276,8 @@ extension AppSession {
             await self.completeConfigMutation(
                 updatedFileNames: [destination.fileName],
                 remoteSourceUpdates: [destination.fileName: request.remoteURL.absoluteString])
+            let subscription = RemoteConfigSubscription(urlString: request.remoteURL.absoluteString)
+            self.upsertRemoteConfigSubscription(for: destination.fileName, subscription: subscription)
             let feedback = self.remoteConfigImportFeedback(
                 outcome: .succeeded(fileName: destination.fileName))
 
@@ -415,6 +417,10 @@ extension AppSession {
             try await self.refreshRemoteConfigTarget(target, userAgent: userAgent)
             await self.completeConfigMutation(updatedFileNames: [fileName])
             self.completeRemoteConfigRefreshSuccess(fileName: fileName, currentState: currentRefreshingState)
+            if let sub = self.remoteConfigSubscriptions[fileName] {
+                self.remoteConfigSubscriptions[fileName] = sub.markChecked()
+                self.persistRemoteConfigSubscriptions()
+            }
         } catch {
             self.logRemoteConfigUpdateFailure(fileName: fileName, error: error)
             self.failRemoteConfigRefresh(fileName: fileName, currentState: currentRefreshingState)
@@ -820,5 +826,27 @@ extension AppSession {
         case .failure:
             nil
         }
+    }
+
+    // MARK: - Remote Config Subscription Management
+
+    func upsertRemoteConfigSubscription(for fileName: String, subscription: RemoteConfigSubscription) {
+        remoteConfigSubscriptions[fileName] = subscription
+        persistRemoteConfigSubscriptions()
+    }
+
+    func removeRemoteConfigSubscription(for fileName: String) {
+        guard remoteConfigSubscriptions[fileName] != nil else { return }
+        remoteConfigSubscriptions.removeValue(forKey: fileName)
+        persistRemoteConfigSubscriptions()
+    }
+
+    func checkedRemoteConfigSubscription(
+        baseline: RemoteConfigSubscription,
+        at checkAt: Date) -> RemoteConfigSubscription?
+    {
+        guard let current = remoteConfigSubscriptions[baseline.urlString] ?? remoteConfigSubscriptions.values.first(where: { $0.urlString == baseline.urlString }) else { return nil }
+        guard current == baseline else { return nil }
+        return current.markChecked(at: checkAt)
     }
 }

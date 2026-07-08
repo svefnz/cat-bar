@@ -1025,6 +1025,8 @@ final class AppSession: ObservableObject {
     }
     var deferredEditableSettingsOverlay: DeferredEditableSettingsOverlayRequest?
     var remoteConfigSources: [String: String] = [:]
+    var remoteConfigSubscriptions: [String: RemoteConfigSubscription] = [:]
+    var remoteConfigAutoUpdateTask: Task<Void, Never>?
     var externalControllerWarningKeys: Set<String> = []
     var powerEventObservers: [(center: NotificationCenter, observer: Any)] = []
     let streamJSONDecoder = JSONDecoder()
@@ -1113,6 +1115,8 @@ final class AppSession: ObservableObject {
         restoreLastSuccessfulConfigIfAvailable()
         self.remoteConfigSources = loadPersistedRemoteConfigSources()
         pruneRemoteConfigSourcesIfNeeded()
+        self.remoteConfigSubscriptions = loadPersistedRemoteConfigSubscriptions()
+        pruneRemoteConfigSubscriptionsIfNeeded()
         // Restore persisted remote target if available; otherwise stay local.
         if case let .remote(machine) = self.remoteMachineStore.activeTarget {
             self.controller = machine.controllerAddress
@@ -1177,6 +1181,7 @@ final class AppSession: ObservableObject {
 
             self.startConfigDirectoryMonitoringIfNeeded()
         }
+        self.scheduleRemoteConfigAutoUpdateIfNeeded()
         if self.resolveAppLaunchAutoStartUseCase.execute(.init(
             startBackgroundRefresh: startBackgroundRefresh,
             shouldRestoreRunningCoreOnLaunch: self.shouldRestoreRunningCoreOnLaunch,
@@ -1211,6 +1216,7 @@ final class AppSession: ObservableObject {
                 webSocketTask.cancel(with: .goingAway, reason: nil)
             }
             providerRefreshTask?.cancel()
+            remoteConfigAutoUpdateTask?.cancel()
         }
     }
 

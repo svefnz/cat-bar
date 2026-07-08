@@ -68,6 +68,7 @@ extension AppSession {
             path: configRepository.configDirectory?.path ?? "-",
             availableFileNames: configRepository.availableConfigs.map(\.lastPathComponent))
         self.pruneRemoteConfigSourcesIfNeeded()
+        self.pruneRemoteConfigSubscriptionsIfNeeded()
     }
 
     func ensureAPIClient() {
@@ -161,5 +162,33 @@ extension AppSession {
         guard filtered != remoteConfigSources else { return }
         remoteConfigSources = filtered
         self.persistRemoteConfigSources()
+    }
+
+    func loadPersistedRemoteConfigSubscriptions() -> [String: RemoteConfigSubscription] {
+        let key = "catbar.config.remote.subscriptions.v1"
+        guard let data = defaults.data(forKey: key),
+              let subscriptions = try? JSONDecoder().decode([String: RemoteConfigSubscription].self, from: data)
+        else {
+            return [:]
+        }
+        return subscriptions
+    }
+
+    func persistRemoteConfigSubscriptions() {
+        let key = "catbar.config.remote.subscriptions.v1"
+        if let data = try? JSONEncoder().encode(self.remoteConfigSubscriptions) {
+            defaults.set(data, forKey: key)
+        }
+    }
+
+    func pruneRemoteConfigSubscriptionsIfNeeded() {
+        let availableNames = Set(availableConfigFileNames)
+        let keysToRemove = remoteConfigSubscriptions.keys.filter { !availableNames.contains($0) }
+        for key in keysToRemove {
+            remoteConfigSubscriptions.removeValue(forKey: key)
+        }
+        if !keysToRemove.isEmpty {
+            persistRemoteConfigSubscriptions()
+        }
     }
 }

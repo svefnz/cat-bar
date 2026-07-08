@@ -73,6 +73,10 @@ extension MenuBarRootView {
             } onRefresh: {
                 Task { await appSession.refreshRemoteConfigFile(named: name) }
             }
+
+            if self.isRemoteConfigFile(name) {
+                self.remoteConfigSubscriptionControls(for: name)
+            }
         }
         AttachedPopoverMenuDivider()
         AttachedPopoverMenuItem(
@@ -223,6 +227,62 @@ extension MenuBarRootView {
     }
 
 
+    @ViewBuilder
+    func remoteConfigSubscriptionControls(for fileName: String) -> some View {
+        if let subscription = appSession.remoteConfigSubscriptions[fileName] {
+            let autoUpdateBinding = Binding<Bool>(
+                get: { subscription.autoUpdateEnabled },
+                set: { newValue in
+                    var updated = subscription
+                    updated.autoUpdateEnabled = newValue
+                    appSession.upsertRemoteConfigSubscription(for: fileName, subscription: updated)
+                    appSession.scheduleRemoteConfigAutoUpdateIfNeeded()
+                })
+
+            let intervalBinding = Binding<Int>(
+                get: { subscription.autoUpdateIntervalHours },
+                set: { newValue in
+                    var updated = subscription
+                    updated.autoUpdateIntervalHours = newValue
+                    appSession.upsertRemoteConfigSubscription(for: fileName, subscription: updated)
+                })
+
+            VStack(alignment: .leading, spacing: T.space2) {
+                Toggle(isOn: autoUpdateBinding) {
+                    Text(tr("ui.settings.auto_update"))
+                        .font(.app(size: T.FontSize.caption, weight: .regular))
+                }
+                .toggleStyle(.switch)
+                .controlSize(.small)
+                .padding(.leading, T.space6)
+
+                if subscription.autoUpdateEnabled {
+                    HStack(spacing: T.space2) {
+                        Text(tr("ui.settings.auto_update_interval"))
+                            .font(.app(size: T.FontSize.caption, weight: .regular))
+                            .foregroundStyle(nativeSecondaryLabel)
+
+                        Stepper(value: intervalBinding, in: 1...72) {
+                            Text("\(subscription.autoUpdateIntervalHours)h")
+                                .font(.app(size: T.FontSize.caption, weight: .regular))
+                                .monospacedDigit()
+                                .foregroundStyle(nativeSecondaryLabel)
+                        }
+                        .controlSize(.small)
+                    }
+                    .padding(.leading, T.space6)
+
+                    if let nextUpdate = subscription.nextUpdateAt() {
+                        Text(tr("ui.settings.next_update", ValueFormatter.dateTime(nextUpdate)))
+                            .font(.app(size: T.FontSize.caption, weight: .regular))
+                            .foregroundStyle(nativeSecondaryLabel)
+                            .padding(.leading, T.space6)
+                    }
+                }
+            }
+            .padding(.vertical, T.space1)
+        }
+    }
 }
 
 private struct ConfigMenuItemView: View {

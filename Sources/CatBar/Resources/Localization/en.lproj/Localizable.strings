@@ -429,3 +429,10 @@
 "fmt.expiry_short.today" = "Expires today";
 "fmt.expiry_short.days" = "%d days left";
 "fmt.expiry_short.long_term" = "Permanent";
+
+"ui.settings.auto_update" = "Auto Update";
+"ui.settings.auto_update_interval" = "Interval (hours)";
+"ui.settings.next_update" = "Next update: %@";
+"fmt.remote_config.next_update_hours_minutes" = "auto %dh %dm";
+"fmt.remote_config.next_update_minutes" = "auto %dm";
+"fmt.remote_config.last_update" = "last %@";

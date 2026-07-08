@@ -294,6 +294,7 @@ extension AppSession {
         self.cancelDeferredEditableSettingsOverlaySync()
         cancelProviderRefresh(reason: "quit requested")
         cancelPolling()
+        cancelRemoteConfigAutoUpdate()
     }
 
     private func disableSystemProxyForTerminationIfNeeded() async {
