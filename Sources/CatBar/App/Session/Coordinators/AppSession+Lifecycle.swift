@@ -189,6 +189,20 @@ extension AppSession {
             if trigger == .manual {
                 shouldResumeCoreAfterNetworkRecovery = false
             }
+
+            // When stopping due to network loss, disable runtime TUN first
+            // to prevent mihomo from reading stale TUN/UDP socket handles
+            // that cause "socket operation on non-socket" errors on wake.
+            if trigger == .networkLoss, self.isTunEnabled, self.isRuntimeRunning {
+                do {
+                    try await self.applyTunRuntimeChange(enabled: false)
+                } catch {
+                    self.appendLog(
+                        level: "error",
+                        message: self.tr("log.tun.toggle_failed", self.tunErrorMessage(error)))
+                }
+            }
+
             await self.prepareForCoreRuntimeStop(preserveFeatureRecovery: true)
             self.cancelDeferredEditableSettingsOverlaySync()
             cancelProviderRefresh(reason: "stop requested")
