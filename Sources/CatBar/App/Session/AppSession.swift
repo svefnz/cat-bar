@@ -1085,6 +1085,8 @@ final class AppSession: ObservableObject {
         }
         do {
             try self.workingDirectoryManager.bootstrapDirectories()
+            ProxyGroupIconCache.configure(
+                iconDirectory: workingDirectoryManager.rootDirectoryURL.appendingPathComponent("icon"))
             catbarLogFileURL = self.workingDirectoryManager.logsDirectoryURL.appendingPathComponent(
                 "catbar.log",
                 isDirectory: false)

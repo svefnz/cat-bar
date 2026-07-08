@@ -269,10 +269,18 @@ extension MenuBarRootView {
 
         return AttachedPopoverMenu { isHovered in
             GeometryReader { geo in
+                let hasIcon = group.icon != nil
                 let columns = self.proxyGroupMainColumnWidths(
                     totalWidth: geo.size.width,
-                    hasLeadingIcon: false)
+                    hasLeadingIcon: hasIcon)
                 HStack(spacing: T.space1) {
+                    if let iconURLString = group.icon, let iconURL = URL(string: iconURLString) {
+                        ProxyGroupIconView(url: iconURL)
+                            .frame(width: T.rowLeadingIcon - T.space2, height: T.rowLeadingIcon - T.space2)
+                            .clipShape(RoundedRectangle(cornerRadius: T.cornerRadius * 0.5))
+                    } else {
+                        Color.clear.frame(width: 0)
+                    }
                     Text(group.name)
                         .font(.app(size: T.FontSize.body, weight: .semibold))
                         .foregroundStyle(nativePrimaryLabel)
