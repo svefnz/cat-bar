@@ -38,6 +38,14 @@ CatBar 当前只发布 `no-core` 版 DMG，不会随应用附带 Clash / `mihomo
 1. 从 [GitHub Releases](https://github.com/QuentinHsu/cat-bar/releases) 下载与你设备架构匹配的 DMG。
 2. 将 `CatBar.app` 拖入 `Applications`。
 3. 从 `Applications` 启动 CatBar。
+
+   > [!NOTE]
+   > 如果 macOS 提示“无法验证开发者，无法打开 CatBar.app”，这是因为该应用未进行 Apple 付费签名和公证。您可以通过在终端中运行以下命令来快速绕过该安全限制：
+   > ```sh
+   > xattr -cr /Applications/CatBar.app
+   > ```
+   > 或者，前往 Mac 的 **系统设置 -> 隐私与安全 -> 安全性** 区域，点击 **仍要打开** 即可。
+
 4. 首次使用前，将名为 `mihomo` 的可执行文件放入：
 
 ```text

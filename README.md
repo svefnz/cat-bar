@@ -39,6 +39,14 @@ CatBar currently publishes `no-core` DMG releases only. The app is distributed w
 1. Download the DMG that matches your Mac from [GitHub Releases](https://github.com/QuentinHsu/cat-bar/releases).
 2. Move `CatBar.app` into `Applications`.
 3. Launch CatBar from `Applications`.
+
+   > [!NOTE]
+   > If macOS displays a Gatekeeper warning stating that *Apple cannot verify the app for malware* (because the app is self-signed/unsigned), you can bypass this security block by running the following command in Terminal:
+   > ```sh
+   > xattr -cr /Applications/CatBar.app
+   > ```
+   > Alternatively, you can go to **System Settings -> Privacy & Security** and click **Open Anyway** under the Security section.
+
 4. Before first use, place an executable named `mihomo` into:
 
 ```text
