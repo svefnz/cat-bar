@@ -803,6 +803,8 @@ final class AppSession: ObservableObject {
         set { self.coreControlPresentationState.upgradeState = newValue }
     }
 
+    @Published var geoUpdateState: GeoUpdateState = .idle
+
     var uiLanguage: AppLanguage {
         get { self.interfacePresentationState.uiLanguage }
         set { self.interfacePresentationState.uiLanguage = newValue }
@@ -940,6 +942,7 @@ final class AppSession: ObservableObject {
     var networkAutoStartTask: Task<Void, Never>?
     var deferredEditableSettingsOverlayTask: Task<Void, Never>?
     var coreUpgradeFeedbackClearTask: Task<Void, Never>?
+    var geoUpdateFeedbackClearTask: Task<Void, Never>?
     var configDirectoryMonitorTask: Task<Void, Never>?
     var trafficDecodeTask: Task<Void, Never>?
     var mihomoLogFlushTask: Task<Void, Never>?

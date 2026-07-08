@@ -222,6 +222,7 @@ extension MenuBarRootView {
         [
             ("ui.action.flush_fakeip_cache", { await appSession.flushFakeIPCache() }),
             ("ui.action.flush_dns_cache", { await appSession.flushDNSCache() }),
+            ("ui.action.update_geo_database", { await appSession.upgradeGeo() }),
         ]
     }
 

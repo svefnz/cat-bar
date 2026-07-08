@@ -50,6 +50,7 @@
 "ui.action.upgrade_ui" = "升级 UI";
 "ui.action.upgrade_geo" = "升级 GEO 资源";
 "ui.action.restart_core_api" = "API 重启 Core";
+"ui.action.update_geo_database" = "更新 Geo 数据库";
 
 "ui.mode.rule" = "规则";
 "ui.mode.global" = "全局";
@@ -355,6 +356,8 @@
 "log.core_upgrade.latest" = "内核已是最新版本";
 "log.core_upgrade.latest_version" = "内核已是最新版本（%@）";
 "log.core_upgrade.failed" = "内核更新失败: %@";
+"log.geo_update.updated" = "Geo 数据库更新成功";
+"log.geo_update.failed" = "Geo 数据库更新失败: %@";
 "log.config.validate_failed" = "配置校验失败（%@）: %@";
 "log.system_proxy.toggled" = "系统代理%@";
 "log.system_proxy.enabled" = "已开启";

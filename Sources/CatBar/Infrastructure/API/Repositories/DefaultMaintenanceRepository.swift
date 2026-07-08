@@ -11,6 +11,10 @@ struct DefaultMaintenanceRepository: MaintenanceRepository, Sendable {
         try await self.transport.request(.upgradeCore)
     }
 
+    func upgradeGeo() async throws {
+        try await self.transport.requestNoResponse(.upgradeGeo)
+    }
+
     func flushFakeIPCache() async throws {
         try await self.transport.requestNoResponse(.flushFakeIPCache)
     }

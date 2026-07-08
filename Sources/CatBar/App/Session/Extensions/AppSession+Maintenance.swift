@@ -126,6 +126,71 @@ extension AppSession {
         }
     }
 
+    func upgradeGeo() async {
+        guard !self.isGeoUpdateInFlight else { return }
+
+        self.geoUpdateFeedbackClearTask?.cancel()
+        self.geoUpdateFeedbackClearTask = nil
+        self.geoUpdateState = .updating
+
+        do {
+            try await self.maintenanceRepository().upgradeGeo()
+            self.applyGeoUpdateState(.succeeded)
+        } catch {
+            self.applyGeoUpdateState(.failed(message: self.geoUpdateFailureMessage(from: error)))
+        }
+    }
+
+    var isGeoUpdateInFlight: Bool {
+        if case .updating = self.geoUpdateState {
+            return true
+        }
+        return false
+    }
+
+    private func applyGeoUpdateState(_ state: GeoUpdateState) {
+        self.geoUpdateState = state
+
+        switch state {
+        case .idle, .updating:
+            return
+        case .succeeded:
+            self.appendLog(level: "info", message: tr("log.geo_update.updated"))
+        case let .failed(message):
+            self.appendLog(level: "error", message: tr("log.geo_update.failed", message))
+        }
+
+        self.scheduleGeoUpdateFeedbackAutoClear()
+    }
+
+    private func scheduleGeoUpdateFeedbackAutoClear() {
+        self.geoUpdateFeedbackClearTask?.cancel()
+        self.geoUpdateFeedbackClearTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: 4_000_000_000)
+            } catch {
+                return
+            }
+
+            guard let self else { return }
+            guard !self.isGeoUpdateInFlight else { return }
+            self.geoUpdateState = .idle
+        }
+    }
+
+    private func geoUpdateFailureMessage(from error: Error) -> String {
+        let raw: String = if let apiError = error as? APIError,
+                             case let .statusCode(_, responseBody) = apiError
+        {
+            responseBody
+        } else {
+            error.localizedDescription
+        }
+
+        let trimmed = raw.trimmedNonEmpty ?? ""
+        return trimmed.isEmpty ? tr("ui.common.unknown") : trimmed
+    }
+
     private func coreUpgradeState(from response: CoreUpgradeResponse) -> CoreUpgradeState {
         self.coreUpgradeStateResolver.resolve(response: response)
     }

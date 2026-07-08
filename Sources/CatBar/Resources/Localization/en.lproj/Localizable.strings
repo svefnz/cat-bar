@@ -50,6 +50,7 @@
 "ui.action.upgrade_ui" = "Upgrade UI";
 "ui.action.upgrade_geo" = "Upgrade GEO Assets";
 "ui.action.restart_core_api" = "Restart Core via API";
+"ui.action.update_geo_database" = "Update Geo Database";
 
 "ui.mode.rule" = "Rule";
 "ui.mode.global" = "Global";
@@ -355,6 +356,8 @@
 "log.core_upgrade.latest" = "Core is already on the latest version";
 "log.core_upgrade.latest_version" = "Core is already on the latest version (%@)";
 "log.core_upgrade.failed" = "Core upgrade failed: %@";
+"log.geo_update.updated" = "Geo database updated successfully";
+"log.geo_update.failed" = "Geo database update failed: %@";
 "log.config.validate_failed" = "Config validation failed (%@): %@";
 "log.system_proxy.toggled" = "System proxy %@";
 "log.system_proxy.enabled" = "enabled";
