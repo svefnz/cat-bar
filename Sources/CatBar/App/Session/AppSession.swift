@@ -658,6 +658,10 @@ final class AppSession: ObservableObject {
         set { self.providerPresentationState.isRuleProvidersRefreshing = newValue }
     }
 
+    @Published var systemProxyExceptions: [String] = []
+
+    @Published var isSystemProxyExceptionsCollapsed: Bool = true
+
     var isSystemProxyEnabled: Bool {
         get { self.systemProxyPresentationState.isEnabled }
         set { self.systemProxyPresentationState.isEnabled = newValue }

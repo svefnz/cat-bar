@@ -142,6 +142,19 @@ extension AppSession {
         defaults.set(remoteConfigSources, forKey: remoteConfigSourcesKey)
     }
 
+    func loadPersistedSystemProxyExceptions() {
+        if let data = defaults.data(forKey: "catbar.system_proxy.exceptions.v1"),
+           let exceptions = try? JSONDecoder().decode([String].self, from: data) {
+            self.systemProxyExceptions = exceptions
+        }
+    }
+
+    func persistSystemProxyExceptions() {
+        if let data = try? JSONEncoder().encode(self.systemProxyExceptions) {
+            defaults.set(data, forKey: "catbar.system_proxy.exceptions.v1")
+        }
+    }
+
     func pruneRemoteConfigSourcesIfNeeded() {
         let availableNames = Set(availableConfigFileNames)
         let filtered = remoteConfigSources.filter { availableNames.contains($0.key) }

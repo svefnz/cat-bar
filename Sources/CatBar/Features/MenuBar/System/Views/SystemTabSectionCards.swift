@@ -230,6 +230,88 @@ extension MenuBarRootView {
         appSession.stringValue(for: .logLevel)
     }
 
+    var proxyExceptionsSectionCard: some View {
+        SystemSettingsSectionCard(
+            title: tr("ui.section.system_proxy_exceptions"),
+            headerTint: nativeTertiaryLabel)
+        {
+            Button {
+                withAnimation(.easeInOut(duration: 0.15)) {
+                    appSession.isSystemProxyExceptionsCollapsed.toggle()
+                }
+            } label: {
+                HStack(spacing: T.space4) {
+                    Image(systemName: "chevron.right")
+                        .font(.app(size: T.FontSize.caption, weight: .semibold))
+                        .foregroundStyle(nativeTertiaryLabel)
+                        .rotationEffect(.degrees(appSession.isSystemProxyExceptionsCollapsed ? 0 : 90))
+                        .frame(width: 14, alignment: .center)
+
+                    Text(tr("ui.section.system_proxy_exceptions"))
+                        .font(.app(size: T.FontSize.body, weight: .medium))
+                        .foregroundStyle(nativePrimaryLabel)
+
+                    Spacer(minLength: 0)
+                }
+                .menuRowPadding(vertical: T.space4)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if !appSession.isSystemProxyExceptionsCollapsed {
+                VStack(alignment: .leading, spacing: T.space4) {
+                    Text(tr("ui.settings.system_proxy_exceptions.hint"))
+                        .font(.app(size: T.FontSize.caption, weight: .regular))
+                        .foregroundStyle(nativeTertiaryLabel)
+
+                    TextEditor(text: Binding(
+                        get: {
+                            appSession.systemProxyExceptions.joined(separator: "\n")
+                        },
+                        set: { newValue in
+                            appSession.systemProxyExceptions = newValue
+                                .components(separatedBy: .newlines)
+                                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                                .filter { !$0.isEmpty }
+                        }))
+                        .font(.app(size: T.FontSize.caption, weight: .regular))
+                        .foregroundStyle(nativePrimaryLabel)
+                        .scrollContentBackground(.hidden)
+                        .background(nativeControlFill)
+                        .cornerRadius(T.cornerRadius)
+                        .overlay {
+                            RoundedRectangle(cornerRadius: T.cornerRadius, style: .continuous)
+                                .stroke(nativeControlBorder.opacity(0.42), lineWidth: T.stroke)
+                        }
+                        .frame(minHeight: 80)
+                        .padding(.top, T.space2)
+
+                    HStack {
+                        Spacer(minLength: 0)
+                        Button(tr("ui.action.save_exceptions")) {
+                            Task {
+                                do {
+                                    try await appSession.setSystemProxyExceptions(appSession.systemProxyExceptions)
+                                    appSession.persistSystemProxyExceptions()
+                                    appSession.appendLog(
+                                        level: "info",
+                                        message: tr("log.system_proxy.exceptions_saved"))
+                                } catch {
+                                    appSession.appendLog(
+                                        level: "error",
+                                        message: tr("log.system_proxy.exceptions_save_failed", error.localizedDescription))
+                                }
+                            }
+                        }
+                        .appBorderedButtonStyle()
+                        .controlSize(.small)
+                    }
+                }
+                .menuRowPadding(vertical: T.space4)
+            }
+        }
+    }
+
     var proxyControlSettingsSectionCard: some View {
         SystemSettingsSectionCard(
             title: tr("ui.section.proxy_control"),

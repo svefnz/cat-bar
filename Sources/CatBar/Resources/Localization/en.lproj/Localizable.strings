@@ -51,6 +51,7 @@
 "ui.action.upgrade_geo" = "Upgrade GEO Assets";
 "ui.action.restart_core_api" = "Restart Core via API";
 "ui.action.update_geo_database" = "Update Geo Database";
+"ui.action.save_exceptions" = "Save";
 
 "ui.mode.rule" = "Rule";
 "ui.mode.global" = "Global";
@@ -116,6 +117,7 @@
 "ui.section.app_settings" = "App Settings";
 "ui.section.network_health" = "Network Health";
 "ui.section.proxy_ports" = "Proxy Ports";
+"ui.section.system_proxy_exceptions" = "Proxy Bypass";
 "ui.section.maintenance" = "Core Operations";
 
 "ui.rules.column.target_type" = "Target / Type";
@@ -204,6 +206,7 @@
 "ui.settings.ports_hint" = "Click Save Ports after editing to apply changes to core config";
 "ui.settings.ports_auto_save_hint" = "Port changes are saved to core config automatically";
 "ui.settings.ports_auto_saving" = "Saving...";
+"ui.settings.system_proxy_exceptions.hint" = "One domain per line. These domains will bypass the system proxy.";
 
 "ui.settings.display_mode.icon_and_speed" = "Icon + Speed";
 "ui.settings.display_mode.icon_only" = "Icon Only";
@@ -370,6 +373,8 @@
 "log.system_proxy.helper_failed" = "System proxy helper unhealthy: %@";
 "log.system_proxy.runtime_repaired" = "Runtime check reapplied system proxy to %@";
 "log.system_proxy.runtime_repair_failed" = "Runtime system proxy repair failed: %@";
+"log.system_proxy.exceptions_saved" = "Proxy bypass list updated";
+"log.system_proxy.exceptions_save_failed" = "Failed to update proxy bypass: %@";
 "log.tun.toggled" = "TUN mode %@";
 "log.tun.enabled" = "enabled";
 "log.tun.disabled" = "disabled";

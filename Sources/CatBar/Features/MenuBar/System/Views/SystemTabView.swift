@@ -438,6 +438,7 @@ extension MenuBarRootView {
         return VStack(alignment: .leading, spacing: T.space6) {
             self.networkHealthSectionCard
             self.proxyControlSettingsSectionCard
+            self.proxyExceptionsSectionCard
             self.appSettingsSectionCard
             self.coreSettingsSectionCard
             self.proxyPortsSectionCard

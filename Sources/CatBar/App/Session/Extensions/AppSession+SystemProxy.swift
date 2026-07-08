@@ -81,6 +81,14 @@ extension AppSession {
         try await self.systemProxyRepository.readActiveDisplay()
     }
 
+    func readSystemProxyExceptions() async throws -> [String] {
+        try await self.systemProxyRepository.readExceptionsList()
+    }
+
+    func setSystemProxyExceptions(_ exceptions: [String]) async throws {
+        try await self.systemProxyRepository.setExceptionsList(exceptions)
+    }
+
     func isSystemProxyConfigured(host: String, ports: SystemProxyPorts) async throws -> Bool {
         try await self.checkSystemProxyConfiguredUseCase.execute(host: host, ports: ports)
     }

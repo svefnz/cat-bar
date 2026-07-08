@@ -36,4 +36,6 @@ protocol SystemProxyRepository: AnyObject {
     func isConfigured(host: String, ports: SystemProxyPorts) async throws -> Bool
     func warmUpHelperIfPossible() async
     func clearBlocking(timeout: TimeInterval)
+    func readExceptionsList() async throws -> [String]
+    func setExceptionsList(_ exceptions: [String]) async throws
 }

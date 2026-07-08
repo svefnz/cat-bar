@@ -35,4 +35,12 @@ final class DefaultSystemProxyRepository: SystemProxyRepository {
     func clearBlocking(timeout: TimeInterval = 2.0) {
         self.service.clearSystemProxyBlocking(timeout: timeout)
     }
+
+    func readExceptionsList() async throws -> [String] {
+        try await self.service.readExceptionsList()
+    }
+
+    func setExceptionsList(_ exceptions: [String]) async throws {
+        try await self.service.setExceptionsList(exceptions)
+    }
 }
