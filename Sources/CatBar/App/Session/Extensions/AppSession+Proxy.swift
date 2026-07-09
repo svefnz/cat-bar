@@ -766,6 +766,7 @@ extension AppSession {
         plan: SystemProxyTogglePlan) async
     {
         isSystemProxyEnabled = enabled
+        defaults.set(enabled, forKey: systemProxyEnabledOnQuitKey)
         systemProxyActiveDisplay = enabled
             ? self.buildSystemProxyDisplayString(host: target.host, ports: target.ports)
             : nil
