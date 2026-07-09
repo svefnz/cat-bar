@@ -1077,7 +1077,6 @@ final class AppSession: ObservableObject {
         self.migrateLegacyAutoStartCorePreferenceIfNeeded()
         refreshLaunchAtLoginStatus()
 
-        self.mihomoBinaryPath = self.coreRepository.detectedBinaryPath ?? "-"
         if let managedProcess = self.processManager as? MihomoProcessManager {
             managedProcess.onLog = { [weak self] line in
                 Task { @MainActor in
@@ -1094,6 +1093,7 @@ final class AppSession: ObservableObject {
         }
         do {
             try self.workingDirectoryManager.bootstrapDirectories()
+            self.mihomoBinaryPath = self.coreRepository.detectedBinaryPath ?? "-"
             ProxyGroupIconCache.configure(
                 iconDirectory: workingDirectoryManager.rootDirectoryURL.appendingPathComponent("icon"))
             catbarLogFileURL = self.workingDirectoryManager.logsDirectoryURL.appendingPathComponent(

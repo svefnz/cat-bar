@@ -79,8 +79,7 @@ extension AppSession {
             try await self.ensureTunPermissions(requestIfMissing: true)
             return overlay
         } catch {
-            isTunEnabled = false
-            persistEditableSettingsSnapshot()
+            // Keep user preference untouched, only disable it in the start overlay.
             appendLog(level: "warning", message: tr("log.tun.startup_disabled"))
             return overlay.withTunEnabled(false)
         }
@@ -94,8 +93,7 @@ extension AppSession {
             if isRuntimeRunning {
                 try? await self.patchTunConfig(enable: false)
             }
-            isTunEnabled = false
-            persistEditableSettingsSnapshot()
+            // Keep user preference untouched to avoid resetting it due to transient startup timing issues.
             appendLog(level: "warning", message: tr("log.tun.startup_disabled"))
         }
     }
