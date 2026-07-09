@@ -584,7 +584,7 @@ extension AppSession {
         self.pendingCoreFeatureRecoveryState = transitionPlan.pendingRecovery
 
         if transitionPlan.shouldDisableTunBeforeTransition {
-            self.isTunEnabled = false
+            // Keep the user preference (isTunEnabled) untouched during core transition
             self.appendLog(level: "info", message: self.tr("log.tun.toggled", self.tr("log.tun.disabled")))
         }
 
@@ -602,7 +602,7 @@ extension AppSession {
         self.pendingCoreFeatureRecoveryState = plan.pendingRecovery
 
         if plan.shouldDeactivateTunPresentation {
-            self.isTunEnabled = false
+            // Keep the user preference (isTunEnabled) untouched during core runtime stop
             self.appendLog(level: "info", message: self.tr("log.tun.toggled", self.tr("log.tun.disabled")))
         }
 
