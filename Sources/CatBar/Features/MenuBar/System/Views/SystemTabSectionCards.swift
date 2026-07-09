@@ -218,13 +218,7 @@ extension MenuBarRootView {
         ]
     }
 
-    var systemMaintenanceActions: [(titleKey: String, action: @MainActor () async -> Void)] {
-        [
-            ("ui.action.flush_fakeip_cache", { await appSession.flushFakeIPCache() }),
-            ("ui.action.flush_dns_cache", { await appSession.flushDNSCache() }),
-            ("ui.action.update_geo_database", { await appSession.upgradeGeo() }),
-        ]
-    }
+
 
     var selectedCoreLogLevel: String {
         appSession.stringValue(for: .logLevel)
@@ -530,10 +524,25 @@ extension MenuBarRootView {
         {
             VStack(alignment: .leading, spacing: T.space4) {
                 HStack(spacing: T.space6) {
-                    ForEach(self.systemMaintenanceActions, id: \.titleKey) { item in
-                        self.maintenanceActionButton(tr(item.titleKey)) {
-                            await item.action()
-                        }
+                    self.maintenanceActionButton(
+                        tr("ui.action.flush_fakeip_cache"),
+                        state: self.flushFakeIPButtonState)
+                    {
+                        await appSession.flushFakeIPCache()
+                    }
+
+                    self.maintenanceActionButton(
+                        tr("ui.action.flush_dns_cache"),
+                        state: self.flushDNSButtonState)
+                    {
+                        await appSession.flushDNSCache()
+                    }
+
+                    self.maintenanceActionButton(
+                        tr("ui.action.update_geo_database"),
+                        state: self.geoUpdateButtonState)
+                    {
+                        await appSession.upgradeGeo()
                     }
                 }
 

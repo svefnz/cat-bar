@@ -41,6 +41,20 @@ enum GeoUpdateState: Equatable {
     case failed(message: String)
 }
 
+enum MaintenanceActionState: Equatable {
+    case idle
+    case loading
+    case succeeded
+    case failed(message: String)
+}
+
+enum ButtonActionState: Equatable {
+    case idle
+    case loading
+    case succeeded
+    case failed
+}
+
 enum ConfigLogLevel: String, CaseIterable {
     case silent
     case error

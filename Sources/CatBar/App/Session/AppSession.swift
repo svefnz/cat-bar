@@ -808,6 +808,8 @@ final class AppSession: ObservableObject {
     }
 
     @Published var geoUpdateState: GeoUpdateState = .idle
+    @Published var flushFakeIPState: MaintenanceActionState = .idle
+    @Published var flushDNSState: MaintenanceActionState = .idle
 
     var uiLanguage: AppLanguage {
         get { self.interfacePresentationState.uiLanguage }

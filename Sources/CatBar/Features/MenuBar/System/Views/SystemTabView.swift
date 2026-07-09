@@ -152,19 +152,43 @@ extension MenuBarRootView {
         .frame(minHeight: T.compactRowHeight, alignment: .center)
     }
 
-    func maintenanceActionButton(_ title: String, action: @escaping () async -> Void) -> some View {
+    func maintenanceActionButton(
+        _ title: String,
+        state: ButtonActionState,
+        action: @escaping () async -> Void) -> some View
+    {
         Button {
             Task { await action() }
         } label: {
-            Text(title)
-                .lineLimit(1)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity, alignment: .center)
+            HStack(spacing: T.space2) {
+                switch state {
+                case .loading:
+                    ProgressView()
+                        .controlSize(.small)
+                case .succeeded:
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(self.nativePositive)
+                case .failed:
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .foregroundStyle(self.nativeCritical)
+                case .idle:
+                    EmptyView()
+                }
+
+                Text(title)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.center)
+            }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
         .appBorderedButtonStyle()
         .controlSize(.small)
-        .disabled(!self.maintenanceActionEnabled)
+        .disabled(!self.maintenanceActionEnabled || state == .loading)
         .opacity(self.maintenanceActionEnabled ? 1 : 0.62)
+    }
+
+    func maintenanceActionButton(_ title: String, action: @escaping () async -> Void) -> some View {
+        self.maintenanceActionButton(title, state: .idle, action: action)
     }
 
     func maintenanceCoreUpgradeButton() -> some View {
@@ -451,6 +475,35 @@ extension MenuBarRootView {
                     color: feedback.color,
                     symbol: feedback.symbol)
             }
+        }
+    }
+}
+
+extension MenuBarRootView {
+    var flushFakeIPButtonState: ButtonActionState {
+        switch appSession.flushFakeIPState {
+        case .idle: .idle
+        case .loading: .loading
+        case .succeeded: .succeeded
+        case .failed: .failed
+        }
+    }
+
+    var flushDNSButtonState: ButtonActionState {
+        switch appSession.flushDNSState {
+        case .idle: .idle
+        case .loading: .loading
+        case .succeeded: .succeeded
+        case .failed: .failed
+        }
+    }
+
+    var geoUpdateButtonState: ButtonActionState {
+        switch appSession.geoUpdateState {
+        case .idle: .idle
+        case .updating: .loading
+        case .succeeded: .succeeded
+        case .failed: .failed
         }
     }
 }

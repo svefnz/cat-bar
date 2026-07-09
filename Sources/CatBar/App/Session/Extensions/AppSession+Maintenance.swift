@@ -45,14 +45,68 @@ extension AppSession {
     }
 
     func flushFakeIPCache() async {
-        await runNoResponseAction(tr("log.action_name.flush_fakeip_cache")) {
+        guard self.flushFakeIPState != .loading else { return }
+
+        self.flushFakeIPState = .loading
+        do {
             try await self.flushFakeIPCacheUseCase().execute()
+            self.applyFlushFakeIPState(.succeeded)
+        } catch {
+            self.applyFlushFakeIPState(.failed(message: error.localizedDescription))
+        }
+    }
+
+    private func applyFlushFakeIPState(_ state: MaintenanceActionState) {
+        self.flushFakeIPState = state
+
+        switch state {
+        case .idle, .loading:
+            return
+        case .succeeded:
+            self.appendLog(level: "info", message: tr("log.action.success", tr("log.action_name.flush_fakeip_cache")))
+        case let .failed(message):
+            self.appendLog(level: "error", message: tr("log.action.failed", tr("log.action_name.flush_fakeip_cache"), message))
+        }
+
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 4_000_000_000)
+            guard let self else { return }
+            if self.flushFakeIPState != .loading {
+                self.flushFakeIPState = .idle
+            }
         }
     }
 
     func flushDNSCache() async {
-        await runNoResponseAction(tr("log.action_name.flush_dns_cache")) {
+        guard self.flushDNSState != .loading else { return }
+
+        self.flushDNSState = .loading
+        do {
             try await self.flushDNSCacheUseCase().execute()
+            self.applyFlushDNSState(.succeeded)
+        } catch {
+            self.applyFlushDNSState(.failed(message: error.localizedDescription))
+        }
+    }
+
+    private func applyFlushDNSState(_ state: MaintenanceActionState) {
+        self.flushDNSState = state
+
+        switch state {
+        case .idle, .loading:
+            return
+        case .succeeded:
+            self.appendLog(level: "info", message: tr("log.action.success", tr("log.action_name.flush_dns_cache")))
+        case let .failed(message):
+            self.appendLog(level: "error", message: tr("log.action.failed", tr("log.action_name.flush_dns_cache"), message))
+        }
+
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 4_000_000_000)
+            guard let self else { return }
+            if self.flushDNSState != .loading {
+                self.flushDNSState = .idle
+            }
         }
     }
 
