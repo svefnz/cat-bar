@@ -164,7 +164,7 @@ extension AppSession {
     }
 
     func syncEditableSettings(from config: ConfigSnapshot) {
-        let incoming = EditableSettingsSnapshot(config: config)
+        let incoming = EditableSettingsSnapshot(config: config).withTunEnabled(self.isTunEnabled)
         self.syncEditableSettings(
             intent: .configRefresh(preserveLocalState: preserveLocalSettingsOnNextSync),
             incoming: incoming)
@@ -655,7 +655,7 @@ extension AppSession {
     private func reconcileEditableSettingsWithRuntimeConfig() async {
         do {
             let config = try await self.fetchRuntimeConfigSnapshot()
-            let incoming = EditableSettingsSnapshot(config: config)
+            let incoming = EditableSettingsSnapshot(config: config).withTunEnabled(self.isTunEnabled)
             self.syncEditableSettings(intent: .runtimeReconciliation, incoming: incoming)
         } catch {
             appendLog(level: "error", message: "Settings reconciliation failed: \(error.localizedDescription)")

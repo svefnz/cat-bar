@@ -611,14 +611,8 @@ extension AppSession {
     }
 
     func seedCoreFeatureRecoveryFromPersistedQuitState() {
-        let wasSystemProxyEnabled = defaults.bool(forKey: systemProxyEnabledOnQuitKey)
-        defaults.removeObject(forKey: systemProxyEnabledOnQuitKey)
-        guard wasSystemProxyEnabled else { return }
-        // Only seed when no in-flight recovery is already pending (e.g. from stop/restart).
-        guard pendingCoreFeatureRecoveryState == nil else { return }
-        pendingCoreFeatureRecoveryState = CoreFeatureRecoveryState(
-            systemProxyEnabled: true,
-            tunEnabled: false)
+        // System proxy state is now directly restored to self.isSystemProxyEnabled in init(),
+        // making transient recovery seeding redundant and timing-sensitive.
     }
 
     func restoreCoreFeaturesAfterStartupIfNeeded() async {

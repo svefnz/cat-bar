@@ -1135,6 +1135,13 @@ final class AppSession: ObservableObject {
             self.pendingAppLaunchOverlaySettings = persisted
         }
 
+        // Restore system proxy state from quit if available
+        let wasSystemProxyEnabledOnQuit = defaults.bool(forKey: systemProxyEnabledOnQuitKey)
+        if wasSystemProxyEnabledOnQuit {
+            self.isSystemProxyEnabled = true
+            defaults.removeObject(forKey: systemProxyEnabledOnQuitKey)
+        }
+
         if startBackgroundRefresh {
             Task {
                 // If a remote target was restored, verify connectivity first.
