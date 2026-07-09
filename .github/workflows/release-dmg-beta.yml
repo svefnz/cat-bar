@@ -64,7 +64,7 @@ jobs:
           - target_arch: x86_64
             dmg_suffix: intel-no-core
             artifact_name: dmg-x86_64-no-core
-    runs-on: macos-15
+    runs-on: macos-latest
     permissions:
       contents: read
     steps:
