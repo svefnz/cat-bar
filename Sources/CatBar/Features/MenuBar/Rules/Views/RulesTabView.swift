@@ -266,7 +266,7 @@ extension MenuBarRootView {
                     Text("\(concreteCount)")
                         .font(.app(size: T.FontSize.caption, weight: .bold))
                         .foregroundStyle(nativeSecondaryLabel)
-                        .frame(width: 32, alignment: .trailing)
+                        .frame(minWidth: 32, alignment: .trailing)
                 }
                 .padding(.horizontal, T.space4)
                 .frame(height: T.rowHeight)
@@ -342,7 +342,7 @@ extension MenuBarRootView {
             Text(stats.hasProvider ? "\(stats.count)" : "")
                 .font(.app(size: T.FontSize.caption, weight: .regular))
                 .foregroundStyle(nativeSecondaryLabel)
-                .frame(width: 32, alignment: .trailing)
+                .frame(minWidth: 32, alignment: .trailing)
         }
         .padding(.horizontal, T.space4)
         .frame(height: T.rowHeight)
