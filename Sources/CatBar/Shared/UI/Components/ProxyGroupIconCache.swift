@@ -15,6 +15,8 @@ final class ProxyGroupIconCache: @unchecked Sendable {
 
     private let cache = NSCache<NSURL, NSImage>()
     private let diskDir: URL
+    private let tasksLock = NSLock()
+    private var inFlightTasks: [URL: Task<NSImage?, Never>] = [:]
 
     private init(iconDirectory: URL) {
         self.diskDir = iconDirectory
@@ -32,11 +34,28 @@ final class ProxyGroupIconCache: @unchecked Sendable {
             return img
         }
 
-        guard let (data, _) = try? await URLSession.shared.data(from: url),
-              let img = NSImage(data: data)
-        else { return nil }
-        self.cache.setObject(img, forKey: cacheKey)
-        try? data.write(to: path)
+        let task: Task<NSImage?, Never> = self.tasksLock.withLock {
+            if let existing = self.inFlightTasks[url] {
+                return existing
+            }
+            let newTask = Task<NSImage?, Never> {
+                guard let (data, _) = try? await URLSession.shared.data(from: url),
+                      let img = NSImage(data: data)
+                else { return nil }
+                self.cache.setObject(img, forKey: cacheKey)
+                try? data.write(to: path)
+                return img
+            }
+            self.inFlightTasks[url] = newTask
+            return newTask
+        }
+
+        let img = await task.value
+
+        self.tasksLock.withLock {
+            _ = self.inFlightTasks.removeValue(forKey: url)
+        }
+
         return img
     }
 }

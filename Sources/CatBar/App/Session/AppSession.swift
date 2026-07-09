@@ -999,6 +999,7 @@ final class AppSession: ObservableObject {
     var mihomoLogFileURL: URL?
     var catbarLogStore: AppLogStore?
     var mihomoLogStore: AppLogStore?
+    let logWriteQueue = DispatchQueue(label: "com.catbar.log.write", qos: .background)
     var lastCoreFailureAlertKey: String?
     var lastCoreFailureAlertAt: Date?
     let coreFailureAlertThrottleInterval: TimeInterval = 20

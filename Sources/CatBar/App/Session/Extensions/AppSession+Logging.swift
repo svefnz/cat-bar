@@ -13,8 +13,13 @@ extension AppSession {
         mihomoLogFlushTask = nil
         pendingMihomoLogs.removeAll(keepingCapacity: true)
         self.clearPresentedLogs(keepingCapacity: false)
-        catbarLogStore?.clear()
-        mihomoLogStore?.clear()
+        
+        let catbarStore = self.catbarLogStore
+        let mihomoStore = self.mihomoLogStore
+        self.logWriteQueue.async {
+            catbarStore?.clear()
+            mihomoStore?.clear()
+        }
     }
 
     func appendLog(level: String, message: String) {
@@ -93,14 +98,18 @@ extension AppSession {
     private func persistLogEntriesToFile(_ entries: [AppErrorLogEntry]) {
         guard !entries.isEmpty else { return }
 
-        let catbarEntries = entries.filter { $0.source == .catbar }
-        if !catbarEntries.isEmpty {
-            catbarLogStore?.append(entries: catbarEntries)
-        }
+        let catbarStore = self.catbarLogStore
+        let mihomoStore = self.mihomoLogStore
+        self.logWriteQueue.async {
+            let catbarEntries = entries.filter { $0.source == .catbar }
+            if !catbarEntries.isEmpty {
+                catbarStore?.append(entries: catbarEntries)
+            }
 
-        let mihomoEntries = entries.filter { $0.source == .mihomo }
-        if !mihomoEntries.isEmpty {
-            mihomoLogStore?.append(entries: mihomoEntries)
+            let mihomoEntries = entries.filter { $0.source == .mihomo }
+            if !mihomoEntries.isEmpty {
+                mihomoStore?.append(entries: mihomoEntries)
+            }
         }
     }
 }

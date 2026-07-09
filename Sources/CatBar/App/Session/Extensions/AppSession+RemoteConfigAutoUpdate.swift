@@ -11,16 +11,16 @@ extension AppSession {
         self.remoteConfigAutoUpdateTask = Task { [weak self] in
             guard let self else { return }
             while !Task.isCancelled {
-                try? await Task.sleep(nanoseconds: 300_000_000_000)
-                guard !Task.isCancelled else { return }
-
                 let dueSubscriptions = self.remoteConfigSubscriptions.filter { $0.value.isDue() }
-                guard !dueSubscriptions.isEmpty else { continue }
-
-                for (fileName, _) in dueSubscriptions {
-                    guard !Task.isCancelled else { return }
-                    await self.refreshRemoteConfigFile(named: fileName)
+                if !dueSubscriptions.isEmpty {
+                    for (fileName, _) in dueSubscriptions {
+                        guard !Task.isCancelled else { return }
+                        await self.refreshRemoteConfigFile(named: fileName)
+                    }
                 }
+
+                guard !Task.isCancelled else { return }
+                try? await Task.sleep(nanoseconds: 300_000_000_000)
             }
         }
     }
