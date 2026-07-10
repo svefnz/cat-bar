@@ -9,7 +9,7 @@ body:
       label: 验证步骤
       description: 在提交之前，请勾选以下选项以证明您已经阅读并理解了以下要求，否则该 issue 将被关闭。
       options:
-        - label: 我已在 [Issue Tracker](https://github.com/QuentinHsu/cat-bar/issues) 中搜索过相同或类似问题，没有找到已有记录。
+        - label: 我已在 [Issue Tracker](https://github.com/svefnz/cat-bar/issues) 中搜索过相同或类似问题，没有找到已有记录。
           required: false
         - label: 应用已放置于 `/Applications/CatBar.app`，而非直接从 DMG 或其他目录运行（系统代理功能依赖此路径）。
           required: true

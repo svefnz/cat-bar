@@ -15,7 +15,7 @@ extension AppSession {
     }
 
     var appReleaseIndexURL: URL? {
-        URL(string: "https://github.com/QuentinHsu/cat-bar/releases")
+        URL(string: "https://github.com/svefnz/cat-bar/releases")
     }
 
     var supportsInAppUpdates: Bool {

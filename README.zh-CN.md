@@ -13,8 +13,8 @@
   <img alt="Swift" src="https://img.shields.io/badge/Swift-6.2-F05138?style=flat&logo=swift" />
   <img alt="Build" src="https://img.shields.io/badge/Build-SwiftPM-0A84FF?style=flat" />
   <img alt="i18n" src="https://img.shields.io/badge/i18n-zh--Hans%20%7C%20en-34C759?style=flat" />
-  <img alt="Version" src="https://img.shields.io/github/v/release/QuentinHsu/cat-bar?style=flat&logo=github" />
-  <img alt="Downloads" src="https://img.shields.io/github/downloads/QuentinHsu/cat-bar/total?style=flat-square&logo=dropbox&logoColor=white&color=green" />
+  <img alt="Version" src="https://img.shields.io/github/v/release/svefnz/cat-bar?style=flat&logo=github" />
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/svefnz/cat-bar/total?style=flat-square&logo=dropbox&logoColor=white&color=green" />
 </p>
 
 <p>
@@ -35,7 +35,7 @@
 
 CatBar 当前只发布 `no-core` 版 DMG，不会随应用附带 Clash / `mihomo` 核心二进制。
 
-1. 从 [GitHub Releases](https://github.com/QuentinHsu/cat-bar/releases) 下载与你设备架构匹配的 DMG。
+1. 从 [GitHub Releases](https://github.com/svefnz/cat-bar/releases) 下载与你设备架构匹配的 DMG。
 2. 将 `CatBar.app` 拖入 `Applications`。
 3. 从 `Applications` 启动 CatBar。
 
@@ -126,18 +126,19 @@ swift test
 
 ## 致谢
 
-- CatBar 基于 [Sitoi/ClashBar](https://github.com/Sitoi/ClashBar) 分叉开发。
+- 此独立维护发行版基于 [QuentinHsu/cat-bar](https://github.com/QuentinHsu/cat-bar) 开发。
+- 上游项目源自 [Sitoi/ClashBar](https://github.com/Sitoi/ClashBar)。
 - 感谢 [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) 提供核心运行时能力。
 
 ## 贡献者
 
 感谢所有参与本项目的贡献者。
 
-[![Contributors](https://contrib.rocks/image?repo=QuentinHsu/cat-bar)](https://github.com/QuentinHsu/cat-bar/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=svefnz/cat-bar)](https://github.com/svefnz/cat-bar/graphs/contributors)
 
 ## Star 趋势
 
-[![Star History Chart](https://starchart.cc/QuentinHsu/cat-bar.svg?variant=adaptive)](https://starchart.cc/QuentinHsu/cat-bar)
+[![Star History Chart](https://starchart.cc/svefnz/cat-bar.svg?variant=adaptive)](https://starchart.cc/svefnz/cat-bar)
 
 ## 许可证
 

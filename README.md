@@ -13,8 +13,8 @@ A macOS menu bar control panel for `mihomo`, built for people who want to manage
   <img alt="Swift" src="https://img.shields.io/badge/Swift-6.2-F05138?style=flat&logo=swift" />
   <img alt="Build" src="https://img.shields.io/badge/Build-SwiftPM-0A84FF?style=flat" />
   <img alt="i18n" src="https://img.shields.io/badge/i18n-zh--Hans%20%7C%20en-34C759?style=flat" />
-  <img alt="Version" src="https://img.shields.io/github/v/release/QuentinHsu/cat-bar?style=flat&logo=github" />
-  <img alt="Downloads" src="https://img.shields.io/github/downloads/QuentinHsu/cat-bar/total?style=flat-square&logo=dropbox&logoColor=white&color=green" />
+  <img alt="Version" src="https://img.shields.io/github/v/release/svefnz/cat-bar?style=flat&logo=github" />
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/svefnz/cat-bar/total?style=flat-square&logo=dropbox&logoColor=white&color=green" />
 
 </p>
 
@@ -36,7 +36,7 @@ A macOS menu bar control panel for `mihomo`, built for people who want to manage
 
 CatBar currently publishes `no-core` DMG releases only. The app is distributed without bundling a Clash / `mihomo` core binary.
 
-1. Download the DMG that matches your Mac from [GitHub Releases](https://github.com/QuentinHsu/cat-bar/releases).
+1. Download the DMG that matches your Mac from [GitHub Releases](https://github.com/svefnz/cat-bar/releases).
 2. Move `CatBar.app` into `Applications`.
 3. Launch CatBar from `Applications`.
 
@@ -127,18 +127,19 @@ For release maintenance details, see [`docs/DEVELOPER.md`](docs/DEVELOPER.md).
 
 ## Acknowledgements
 
-- CatBar is forked from [Sitoi/ClashBar](https://github.com/Sitoi/ClashBar).
+- This independently maintained distribution is based on [QuentinHsu/cat-bar](https://github.com/QuentinHsu/cat-bar).
+- The upstream project is itself forked from [Sitoi/ClashBar](https://github.com/Sitoi/ClashBar).
 - Thanks to [MetaCubeX/mihomo](https://github.com/MetaCubeX/mihomo) for the core runtime capabilities.
 
 ## Contributors
 
 Thanks to everyone who has contributed to the project.
 
-[![Contributors](https://contrib.rocks/image?repo=QuentinHsu/cat-bar)](https://github.com/QuentinHsu/cat-bar/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=svefnz/cat-bar)](https://github.com/svefnz/cat-bar/graphs/contributors)
 
 ## Star History
 
-[![Star History Chart](https://starchart.cc/QuentinHsu/cat-bar.svg?variant=adaptive)](https://starchart.cc/QuentinHsu/cat-bar)
+[![Star History Chart](https://starchart.cc/svefnz/cat-bar.svg?variant=adaptive)](https://starchart.cc/svefnz/cat-bar)
 
 ## License
 

@@ -6,7 +6,7 @@ enum AppReleaseServiceError: Error {
 }
 
 enum AppReleaseService {
-    private static let latestReleaseURL = URL(string: "https://api.github.com/repos/QuentinHsu/cat-bar/releases/latest")!
+    private static let latestReleaseURL = URL(string: "https://api.github.com/repos/svefnz/cat-bar/releases/latest")!
 
     static func fetchLatestRelease(currentVersion: String) async throws -> AppReleaseInfo {
         var request = URLRequest(url: Self.latestReleaseURL)
