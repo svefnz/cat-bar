@@ -68,6 +68,26 @@ jobs:
             echo "$raw"
           }
 
+          resolve_previous_tag() {
+            local release_tag="${1:-}"
+            local release_version="${release_tag#v}"
+            local candidate
+
+            while IFS= read -r candidate; do
+              if [[ ! "$candidate" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                continue
+              fi
+              if [[ -n "$release_version" && "${candidate#v}" == "$release_version" ]]; then
+                continue
+              fi
+              echo "$candidate"
+              return 0
+            done < <(git tag --merged HEAD --sort=-v:refname)
+
+            echo "No stable SemVer baseline tag reachable from HEAD. Create a baseline tag before releasing." >&2
+            return 1
+          }
+
           tag=""
           version=""
           previous_tag=""
@@ -78,11 +98,7 @@ jobs:
               echo "Tag '$tag' is not valid (expected v1.2.3 or 1.2.3)." >&2
               exit 1
             fi
-            previous_tag="$(
-              git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname \
-                | grep -Fxv "$tag" \
-                | head -n 1 || true
-            )"
+            previous_tag="$(resolve_previous_tag "$tag")"
           else
             git fetch --tags --force
 
@@ -92,19 +108,11 @@ jobs:
                 exit 1
               fi
               version="$(extract_version "$tag")"
-              previous_tag="$(
-                git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname \
-                  | grep -Fxv "$tag" \
-                  | head -n 1 || true
-              )"
+              previous_tag="$(resolve_previous_tag "$tag")"
             else
-              previous_tag="$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -n 1 || true)"
-              base_version="0.0.0"
-              range="HEAD"
-              if [[ -n "$previous_tag" ]]; then
-                base_version="${previous_tag#v}"
-                range="${previous_tag}..HEAD"
-              fi
+              previous_tag="$(resolve_previous_tag)"
+              base_version="${previous_tag#v}"
+              range="${previous_tag}..HEAD"
 
               bump="${INPUT_BUMP:-auto}"
               if [[ "$bump" == "auto" || -z "$bump" ]]; then
@@ -119,7 +127,7 @@ jobs:
                 fi
 
                 if [[ -z "$bump" ]]; then
-                  echo "No releasable commits found since ${previous_tag:-repository start}. Set bump manually." >&2
+                  echo "No releasable commits found since ${previous_tag}. Set bump manually." >&2
                   exit 1
                 fi
               fi
@@ -146,7 +154,7 @@ jobs:
               esac
               tag="v${major}.${minor}.${patch}"
               version="${major}.${minor}.${patch}"
-              echo "Auto-calculated tag: $tag (bump: $bump, base: ${previous_tag:-none})"
+              echo "Auto-calculated tag: $tag (bump: $bump, base: ${previous_tag})"
             fi
           fi
 
@@ -340,6 +348,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           ref: ${{ needs.prepare-version.outputs.tag }}
+          fetch-depth: 0
 
       - name: Download dmg artifacts
         uses: actions/download-artifact@v7
@@ -357,7 +366,8 @@ jobs:
           Scripts/generate_release_notes.sh \
             "${{ needs.prepare-version.outputs.tag }}" \
             "${{ needs.prepare-version.outputs.version }}" \
-            release.md
+            release.md \
+            "${{ needs.prepare-version.outputs.previous_tag }}"
 
       - name: Verify GitHub CLI
         shell: bash
