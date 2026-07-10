@@ -1,3 +1,93 @@
+## v1.0.5
+
+> 本次更新重点覆盖 `changelog`、`preference`、`proxy`，主要提升交互表现并修复稳定性问题。
+
+### 🚀 优化改进
+
+- **changelog**：release 1.0.4
+
+### 🐞 问题修复
+
+- **preference**：fix system proxy and TUN preference loss on app restart
+- **proxy**：add real-time system proxy preference persistence to survive crash and force-quit
+
+## v1.0.4
+
+> 本次更新重点覆盖 `changelog`、`tun`，主要提升交互表现并修复稳定性问题。
+
+### 🚀 优化改进
+
+- **changelog**：
+  - release 1.0.3
+  - release 1.0.4
+- use macos-latest runner to resolve GitHub Actions hanging issue
+
+### 🐞 问题修复
+
+- **tun**：fix AppSession initialization timing and safeguard TUN user preference
+
+## v1.0.3
+
+> 本次更新重点覆盖 `changelog`、`ui`、`tun`，同时包含能力补齐、交互整理和稳定性修复。
+
+### ✨ 新增功能
+
+- **ui**：display execution states on FakeIP and DNS cache flush buttons
+
+### 🚀 优化改进
+
+- **changelog**：release 1.0.3
+- use macos-latest runner to resolve GitHub Actions hanging issue
+
+### 🐞 问题修复
+
+- **tun**：preserve isTunEnabled preference when stopping core
+
+## v1.0.2
+
+> 本次更新重点覆盖 `performance`、`ui`，主要提升交互表现并修复稳定性问题。
+
+### 🚀 优化改进
+
+- **performance**：optimize log persistence, remote auto-update timing, and icon caching concurrent safety
+
+### 🐞 问题修复
+
+- **ui**：use minWidth instead of fixed width for rule counts to prevent wrapping
+
+## v1.0.1
+
+> 本次更新重点覆盖 `changelog`、`readme`、`lifecycle`，同时包含能力补齐、交互整理和稳定性修复。
+
+### ✨ 新增功能
+
+- **maintenance**：add one-click Geo database update
+- **proxy**：add proxy group icon cache with NSCache + disk fallback
+- **system-proxy**：add proxy bypass (exception) management
+- **config**：add remote subscription management
+
+### 🚀 优化改进
+
+- **changelog**：release 1.0.0
+- **readme**：add Gatekeeper warning bypass note for macOS users
+
+### 🐞 问题修复
+
+- **lifecycle**：disable runtime TUN before network loss stop
+
+## v1.0.0
+
+> 本次更新重点覆盖 `readme`、`persistence`、`changelog`，主要补齐能力并整理交互体验。
+
+### ✨ 新增功能
+
+- **persistence**：implement log file size rotation and backup capping
+
+### 🚀 优化改进
+
+- **readme**：rewrite bilingual readme content
+- **changelog**：release 1.0.0
+
 ## v0.11.1
 
 > 本次更新优化了核心停止后的清理与恢复处理，并收紧了菜单栏系统页布局，使整体使用体验更稳定、界面更清爽。
